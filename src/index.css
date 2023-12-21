@@ -9,3 +9,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.active{
+  background: transparent !important;
+  color: red !important;
+  font-weight: 700 !important;
+  border-radius: 50px !important;
+}
+ul > li{
+  background: transparent !important;
+  color: black !important;
+  font-weight: 700 !important;
+  border-radius: 50px !important;
+}
+ul > li :hover{
+  background: transparent !important;
+  animation-duration: 700ms !important;
+  color: red !important;
+  font-weight: 700 !important;
+  border-radius: 50px !important;
+}
