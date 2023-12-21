@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet";
 import useAxios from "../../Utils/Hooks/axios/useaxios";
 import useAuth from "../../Utils/Hooks/useAuth/useAuth";
-import GoogleSignIn from "../../Auth/GoogleSignIn/GoogleSignIn";
 import { useState } from "react";
+import { IoReturnUpBack } from "react-icons/io5";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -19,21 +19,36 @@ const SignUp = () => {
     reset,
   } = useForm();
   const { signUpUser, updateUserProfile } = useAuth();
+
+//   Get the profession from the user 
+
+  const [profession, setProfession] = useState("");
+  const handleProfession = (e)=>{
+    setProfession(e.target.value)
+  }
+
   const onSubmit = (data) => {
     const toastid = toast.loading("Sign Up Processing");
     signUpUser(data.email, data.password)
       .then((res) => {
         console.log(res.user);
+
+        // update the user profile on firebase with relevant data
+
         updateUserProfile(data.name, data.photoUrl)
           .then((res) => {
             const userdata = {
               email: data.email,
               name: data.name,
               photo: data.photoUrl,
-              role: "user",
+              type: profession,
               creationDate: new Date().toDateString(),
             };
-            axios.post("/users", userdata).then((res) => {
+
+            // if the profile get update successfully Send the data to the server
+
+            axios.post("/createUser", userdata)
+            .then((res) => {
               if (res.data.insertedId) {
                 toast.success("Sign Up SuccessFully", { id: toastid });
                 reset();
@@ -41,33 +56,41 @@ const SignUp = () => {
               }
             });
           })
-          .catch((error) => console.log(error));
+
+        //   If any error happen show it to the user 
+
+          .catch((error) => {
+            toast.error(error)
+          });
         console.log(data);
       })
+
+    //   If Email is already registered Send A toast to the user
+
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
           toast.error("Email Already Registered", { id: toastid });
         }
       });
   };
-  const [profession, setProfession] = useState("");
-  const handlePriceRange = (e)=>{
-    setProfession(e.target.value)
-  }
+
 
   return (
-    <div className="bg-cover"
+    <div className="bg-cover relative"
       style={{
         backgroundImage:
           'url("https://i.ibb.co/7NJZ15z/13900642-5387142.jpg")',
       }}
     >
+       <Link to={'/'}>
+       <button className=" text-black font-semibold flex justify-center gap-2  absolute left-96 top-10"> <span className="text-2xl"><IoReturnUpBack/></span> Back To Home</button>
+       </Link>
       <div className="flex h-screen gap-10 container mx-auto  justify-center items-center">
         <Helmet>
           <title>Echo Estate || Sign Up</title>
         </Helmet>
         <div className="lg:w-1/2 w-[90vw]">
-          <div className="card  lg:w-3/4  mx-auto shadow-[0_0_30px_] pb-10 my-10 backdrop-blur-sm ">
+          <div className="card  lg:w-3/4  mx-auto shadow-[0_0_20px_] backdrop-blur-sm p-10 my-10">
             <form onSubmit={handleSubmit(onSubmit)} className="card-body">
               <div className="form-control">
                 <label className="label">
@@ -99,11 +122,12 @@ const SignUp = () => {
               </div>
               {/* for selecting profession */}
               <select
-              onChange={handlePriceRange}
-              className="select select-bordered bg-gray-100 hover:bg-gray-100 border-dashed border-main focus:border-main text-black font-semibold join-item"
+              onChange={handleProfession}
+              className="select select-bordered mt-4 bg-gray-100 hover:bg-gray-100 border-dashed border-main focus:border-main join-item"
+              required
             >
                  
-              <option className="font-normal " disabled selected>
+              <option className=" " disabled selected>
                 Select Your Profession
               </option>
               <option>Developer</option>
@@ -112,6 +136,7 @@ const SignUp = () => {
               <option>Banker</option>
               <option>Govt Job</option>
               <option>Doctor</option>
+              <option>Other</option>
             </select>
               {/* end here */}
 

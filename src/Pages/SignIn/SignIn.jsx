@@ -3,6 +3,8 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet";
 import GoogleSignIn from "../../Auth/GoogleSignIn/GoogleSignIn";
+import { IoReturnUpBack } from "react-icons/io5";
+import useAuth from "../../Utils/Hooks/useAuth/useAuth";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -12,7 +14,7 @@ const SignIn = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signInUser } = "";
+  const { signInUser } = useAuth();
   const onSubmit = (data) => {
     const toastid = toast.loading("Sign Up Processing");
     signInUser(data.email, data.password)
@@ -28,12 +30,15 @@ const SignIn = () => {
       });
   };
   return (
-    <div className="bg-cover "
+    <div className="bg-cover relative "
       style={{backgroundImage:'url("https://i.ibb.co/7NJZ15z/13900642-5387142.jpg")'}}
     >
+        <Link to={'/'}>
+       <button className=" text-black font-semibold flex justify-center gap-2  absolute left-96 top-10"> <span className="text-2xl"><IoReturnUpBack/></span> Back To Home</button>
+       </Link>
       <div className="flex h-screen gap-10 container mx-auto  justify-center items-center">
       <Helmet>
-        <title>Echo Estate || Sign In</title>
+        <title>Task Vault || Sign In</title>
       </Helmet>
         <div className="lg:w-1/2 w-[90vw]">
           <div className="card  lg:w-3/4  mx-auto shadow-[0_0_20px_] backdrop-blur-sm p-10 my-10">

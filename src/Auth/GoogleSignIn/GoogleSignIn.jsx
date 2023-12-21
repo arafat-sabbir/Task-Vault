@@ -19,9 +19,9 @@ const GoogleSignIn = () => {
             type:'others',
             creationDate:new Date().toDateString()
         }
+        navigate('/')
         axios.post(`/createUser`,userInfo)
         .then(res=> {
-          console.log(res.data)
           
         })
       })

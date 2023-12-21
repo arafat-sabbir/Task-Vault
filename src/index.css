@@ -4,6 +4,7 @@
   overflow: hidden;
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.025em !important;
 }
 
 @tailwind base;
@@ -15,12 +16,7 @@
   font-weight: 700 !important;
   border-radius: 50px !important;
 }
-ul > li{
-  background: transparent !important;
-  color: black !important;
-  font-weight: 700 !important;
-  border-radius: 50px !important;
-}
+
 ul > li :hover{
   background: transparent !important;
   animation-duration: 700ms !important;
