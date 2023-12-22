@@ -146,10 +146,10 @@ const Tasks = () => {
   };
 
   if (isLoading || isPending) {
-    return <p className="text-5xl">Loading</p>;
+    return <span className="loading loading-dots loading-lg"></span>;
   }
   if(!toDo||!onGoing||!complete){
-    return <p className="text-5xl">Loading</p>
+    return <span className="loading loading-dots loading-lg"></span>
   }
   return (
     <div>

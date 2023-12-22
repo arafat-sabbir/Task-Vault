@@ -1,8 +1,8 @@
 const OurUser = () => {
   return (
-    <div className="bg-white py-10">
+    <div className="bg-white py-20">
         <div className=" container mx-auto">
-      <h1 className=" text-center text-3xl font-semibold mb-10">People Who Get Benifeted</h1>
+      <h1 className=" text-center text-3xl font-semibold mb-20">People Who Get Benifeted</h1>
 <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10 justify-items-center ">
     
 <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
