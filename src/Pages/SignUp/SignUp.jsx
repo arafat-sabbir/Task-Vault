@@ -20,12 +20,12 @@ const SignUp = () => {
   } = useForm();
   const { signUpUser, updateUserProfile } = useAuth();
 
-//   Get the profession from the user 
+  //   Get the profession from the user
 
   const [profession, setProfession] = useState("");
-  const handleProfession = (e)=>{
-    setProfession(e.target.value)
-  }
+  const handleProfession = (e) => {
+    setProfession(e.target.value);
+  };
 
   const onSubmit = (data) => {
     const toastid = toast.loading("Sign Up Processing");
@@ -48,25 +48,25 @@ const SignUp = () => {
 
             // if the profile get update successfully Send the data to the server
 
-            // axios.post("/createUser", userdata)
-            // .then((res) => {
-            //   if (res.data.insertedId) {
-            //     toast.success("Sign Up SuccessFully", { id: toastid });
-            //     reset();
-            //     navigate(location.state ? location.state : "/");
-            //   }
-            // });
+            axios.post("/createUser", userdata)
+            .then((res) => {
+              if (res.data.insertedId) {
+                toast.success("Sign Up SuccessFully", { id: toastid });
+                reset();
+                navigate(location.state ? location.state : "/");
+              }
+            });
           })
 
-        //   If any error happen show it to the user 
+          //   If any error happen show it to the user
 
           .catch((error) => {
-            toast.error(error)
+            toast.error(error);
           });
         console.log(data);
       })
 
-    //   If Email is already registered Send A toast to the user
+      //   If Email is already registered Send A toast to the user
 
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
@@ -75,17 +75,22 @@ const SignUp = () => {
       });
   };
 
-
   return (
-    <div className="bg-cover relative"
+    <div
+      className="bg-cover relative"
       style={{
-        backgroundImage:
-          'url("https://i.ibb.co/7NJZ15z/13900642-5387142.jpg")',
+        backgroundImage: 'url("https://i.ibb.co/7NJZ15z/13900642-5387142.jpg")',
       }}
     >
-       <Link to={'/'}>
-       <button className=" text-black font-semibold flex justify-center gap-2  absolute left-96 top-10"> <span className="text-2xl"><IoReturnUpBack/></span> Back To Home</button>
-       </Link>
+      <Link to={"/"}>
+        <button className=" text-black font-semibold flex justify-center gap-2  absolute left-96 top-10">
+          {" "}
+          <span className="text-2xl">
+            <IoReturnUpBack />
+          </span>{" "}
+          Back To Home
+        </button>
+      </Link>
       <div className="flex h-screen gap-10 container mx-auto  justify-center items-center">
         <Helmet>
           <title>Echo Estate || Sign Up</title>
@@ -138,22 +143,21 @@ const SignUp = () => {
               </div>
               {/* for selecting profession */}
               <select
-              onChange={handleProfession}
-              className="select select-bordered mt-4 bg-gray-100 hover:bg-gray-100 border-dashed border-main focus:border-main join-item"
-              required
-            >
-                 
-              <option className=" " disabled selected>
-                Select Your Profession
-              </option>
-              <option>Developer</option>
-              <option>Student</option>
-              <option>Engineer</option>
-              <option>Banker</option>
-              <option>Govt Job</option>
-              <option>Doctor</option>
-              <option>Other</option>
-            </select>
+                onChange={handleProfession}
+                className="select select-bordered mt-4 bg-gray-100 hover:bg-gray-100 border-dashed border-main focus:border-main join-item"
+                required
+              >
+                <option className=" " disabled selected>
+                  Select Your Profession
+                </option>
+                <option>Developer</option>
+                <option>Student</option>
+                <option>Engineer</option>
+                <option>Banker</option>
+                <option>Govt Job</option>
+                <option>Doctor</option>
+                <option>Other</option>
+              </select>
               {/* end here */}
 
               <div className="form-control">

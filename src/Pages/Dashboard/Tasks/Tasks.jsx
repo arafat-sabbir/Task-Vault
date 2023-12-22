@@ -5,9 +5,13 @@ import useUserinfo from "../../../Utils/Hooks/useUserinfo/useUserinfo";
 import useAxios from "../../../Utils/Hooks/axios/useaxios";
 import { useQuery } from "@tanstack/react-query";
 import TodoTask from "./TodoTask/TodoTask";
+import useAuth from "../../../Utils/Hooks/useAuth/useAuth";
+import OngoingTask from "./Ongoingtask/Ongoingtask";
+import CompleteTask from "./CompleteTask/CompleteTask";
 
 const Tasks = () => {
   const { userinfo } = useUserinfo();
+  const { user } = useAuth();
   const axios = useAxios();
   // Filter the tasks based on the Status;
   const [toDo, setTodo] = useState("");
@@ -16,27 +20,29 @@ const Tasks = () => {
 
   // Get The Tasks From Database Based On the Logged in User
 
-  const { data: tasks = [],isLoading,refetch } = useQuery({
+  const {
+    data: tasks,
+    isLoading,
+    isPending,
+    refetch,
+  } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
-      const res = await axios.get(`/getTasksByUser?email=${userinfo.email}`);
+      const res = await axios.get(`/getTasksByUser?email=${user?.email}`);
       return res.data;
     },
   });
-
   useEffect(() => {
-   if(userinfo){
     const todoTasks = tasks?.filter((item) => item.taskStatus === "to-do");
     const onGoingTasks = tasks?.filter((item) => item.taskStatus === "onGoing");
-    const completeTasks = tasks?.filter((item) => item.taskStatus === "complete");
-    
+    const completeTasks = tasks?.filter(
+      (item) => item.taskStatus === "completed"
+    );
     setTodo(todoTasks);
     setOngoing(onGoingTasks);
     setComplete(completeTasks);
-   }
-  }, [tasks,userinfo]);
-  console.log(toDo, onGoing, complete);
-  
+  }, [tasks]);
+
   // Get the priority from the select option
   const [priority, setPriority] = useState("");
   const handlePriority = (e) => {
@@ -69,12 +75,14 @@ const Tasks = () => {
     axios.post("/createTasks", taskInfo).then((res) => {
       if (res.data.insertedId) {
         toast.success("Task Created SuccessFully", { id: taskToast });
-        refetch()
+        refetch();
       }
     });
     document.getElementById("my_modal_1").close();
   };
-
+  if (isLoading || isPending) {
+    return <p className="text-5xl">Loading</p>;
+  }
   return (
     <div>
       <div className="flex justify-between min-w-full items-center">
@@ -160,16 +168,30 @@ const Tasks = () => {
           </div>
         </dialog>
         {/* Modal End */}
-        
       </div>
-      {isLoading ?<p className="text-5xl">loading</p>:<div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 py-10 h-[500vh]" >
-      <div>
-      {
-          tasks?.map(item=><TodoTask key={item._id} task={item}></TodoTask>)
-      }
-      </div>
-      </div>
-      }
+
+      {tasks && (
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 py-10 gap-10">
+          <div className="bg-[#FDF0EC]">
+            <h3 className="text-3xl font-semibold ml-6 mt-6">To Do</h3>
+            {toDo?.map((item) => (
+              <TodoTask key={item._id} task={item}></TodoTask>
+            ))}
+          </div>
+          <div className="bg-[#FDF0EC]">
+            <h3 className="text-3xl font-semibold ml-6 mt-6">On Going</h3>
+            {onGoing?.map((item) => (
+              <OngoingTask key={item._id} task={item}></OngoingTask>
+            ))}
+          </div>
+          <div className="bg-[#FDF0EC]">
+            <h3 className="text-3xl font-semibold ml-6 mt-6">Completed</h3>
+            {complete?.map((item) => (
+              <CompleteTask key={item._id} task={item}></CompleteTask>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
