@@ -8,6 +8,8 @@ import TodoTask from "./TodoTask/TodoTask";
 import useAuth from "../../../Utils/Hooks/useAuth/useAuth";
 import OngoingTask from "./Ongoingtask/Ongoingtask";
 import CompleteTask from "./CompleteTask/CompleteTask";
+import Swal from "sweetalert2";
+import { VscEdit } from "react-icons/vsc";
 
 const Tasks = () => {
   const { userinfo } = useUserinfo();
@@ -34,7 +36,7 @@ const Tasks = () => {
   });
   useEffect(() => {
     const todoTasks = tasks?.filter((item) => item.taskStatus === "to-do");
-    const onGoingTasks = tasks?.filter((item) => item.taskStatus === "onGoing");
+    const onGoingTasks = tasks?.filter((item) => item.taskStatus === "ongoing");
     const completeTasks = tasks?.filter(
       (item) => item.taskStatus === "completed"
     );
@@ -53,6 +55,7 @@ const Tasks = () => {
   const handleCancel = (e) => {
     e.preventDefault();
     document.getElementById("my_modal_1").close();
+    document.getElementById("my_modal_2").close();
     toast.error("Task Canceled");
   };
   // HandleFrom Submit
@@ -79,7 +82,63 @@ const Tasks = () => {
       }
     });
     document.getElementById("my_modal_1").close();
+    form.reset();
   };
+  // handle Delete Task by user confirmation
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#0e3c49da",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const tid = toast.loading(`Deleting Tasks`);
+        axios.delete(`/deleteTask/${id}`).then((res) => {
+          console.log(res.data);
+          if (res.data.deletedCount > 0) {
+            toast.success("Task Deleted", { id: tid });
+            refetch();
+          }
+        });
+        n;
+      }
+    });
+  };
+  let editid = "";
+  const handleEdit = (id) => {
+    document.getElementById("my_modal_2").showModal();
+    editid = id;
+  };
+  const handleEditSubmit = (e) => {
+    const form = e.target;
+    // Show a Task Submitting toast
+    const editToast = toast.loading("Creating Task");
+    e.preventDefault();
+    // Make the task info object
+    const taskUpdateInfo = {
+      tasktitle: form.title.value,
+      taskdeadline: form.deadline.value,
+      taskPriority: priority,
+      description: form.description.value,
+      userEmail: userinfo.email,
+      userName: userinfo.name,
+    };
+    // Send The task info to the Server
+    // axios.post("/createTasks", taskInfo).then((res) => {
+    //   if (res.data.insertedId) {
+    //     toast.success("Task Created SuccessFully", { id: taskToast });
+    //     refetch();
+    //   }
+    // });
+    console.log(taskUpdateInfo);
+    document.getElementById("my_modal_2").close();
+    form.reset();
+  };
+
   if (isLoading || isPending) {
     return <p className="text-5xl">Loading</p>;
   }
@@ -167,27 +226,120 @@ const Tasks = () => {
             </form>
           </div>
         </dialog>
+        <dialog id="my_modal_2" className="modal">
+          <div className="modal-box">
+            <form className="p-4" onSubmit={handleEditSubmit}>
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Task Title?</span>
+                </div>
+                <input
+                  type="text"
+                  className="input input-bordered w-full"
+                  name="title"
+                  required
+                  placeholder="Task Title"
+                />
+              </label>
+              <label className="form-control w-full ">
+                <div className="label">
+                  <span className="label-text">Task Deadline?</span>
+                </div>
+                <input
+                  name="deadline"
+                  type="date"
+                  required
+                  className="input input-bordered w-full "
+                />
+              </label>
+              <select
+                onChange={handlePriority}
+                className="select select-bordered mt-4 w-full  join-item"
+                required
+              >
+                <option disabled selected>
+                  Select Task Priority
+                </option>
+                <option>Low</option>
+                <option>Moderate</option>
+                <option>High</option>
+              </select>
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Task Description?</span>
+                </div>
+                <textarea
+                  placeholder="Task Description"
+                  className="textarea textarea-bordered"
+                  name="description"
+                  cols="10"
+                  rows="4"
+                  required
+                ></textarea>
+              </label>
+              <div className="modal-action">
+                {/* if there is a button in form, it will close the modal */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleCancel}
+                    className="btn bg-red-500 text-white rounded-sm hover:bg-red-500"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex font-semibold items-center bg-red-500 text-white px-4 py-2 rounded-sm"
+                  >
+                    {" "}
+                    <VscEdit className="text-xl mr-2"></VscEdit> Edit Task
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </dialog>
         {/* Modal End */}
       </div>
 
       {tasks && (
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 py-10 gap-10">
-          <div className="bg-[#FDF0EC]">
-            <h3 className="text-3xl font-semibold ml-6 mt-6">To Do</h3>
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1  py-10 gap-10">
+          <div className="bg-[#EEF2FC]">
+            <h3 className="text-3xl font-semibold ml-6 mt-6 max-h-min ">
+              To Do : {toDo?.length}{" "}
+            </h3>
             {toDo?.map((item) => (
-              <TodoTask key={item._id} task={item}></TodoTask>
+              <TodoTask
+                key={item._id}
+                task={item}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+              ></TodoTask>
             ))}
           </div>
-          <div className="bg-[#FDF0EC]">
-            <h3 className="text-3xl font-semibold ml-6 mt-6">On Going</h3>
+          <div className="bg-[#FFF6EB]">
+            <h3 className="text-3xl font-semibold ml-6 mt-6">
+              On Going : {onGoing?.length}{" "}
+            </h3>
             {onGoing?.map((item) => (
-              <OngoingTask key={item._id} task={item}></OngoingTask>
+              <OngoingTask
+                key={item._id}
+                task={item}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+              ></OngoingTask>
             ))}
           </div>
           <div className="bg-[#FDF0EC]">
-            <h3 className="text-3xl font-semibold ml-6 mt-6">Completed</h3>
+            <h3 className="text-3xl font-semibold ml-6 mt-6">
+              Completed : {complete?.length}
+            </h3>
             {complete?.map((item) => (
-              <CompleteTask key={item._id} task={item}></CompleteTask>
+              <CompleteTask
+                key={item._id}
+                task={item}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+              ></CompleteTask>
             ))}
           </div>
         </div>
