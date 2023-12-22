@@ -34,6 +34,8 @@ const Tasks = () => {
       return res.data;
     },
   });
+
+  // Filtered The task based on the status
   useEffect(() => {
     const todoTasks = tasks?.filter((item) => item.taskStatus === "to-do");
     const onGoingTasks = tasks?.filter((item) => item.taskStatus === "ongoing");
@@ -56,6 +58,7 @@ const Tasks = () => {
     e.preventDefault();
     document.getElementById("my_modal_1").close();
     document.getElementById("my_modal_2").close();
+    setPriority('')
     toast.error("Task Canceled");
   };
   // HandleFrom Submit
@@ -83,6 +86,7 @@ const Tasks = () => {
     });
     document.getElementById("my_modal_1").close();
     form.reset();
+    setPriority('')
   };
   // handle Delete Task by user confirmation
   const handleDelete = (id) => {
@@ -104,15 +108,18 @@ const Tasks = () => {
             refetch();
           }
         });
-        n;
       }
     });
   };
-  let editid = "";
+  // Open the modal for updating the tasks
+  const [editId,setEditId] = useState('')
   const handleEdit = (id) => {
     document.getElementById("my_modal_2").showModal();
-    editid = id;
+    setEditId(id)
+    console.log(id);
   };
+console.log(editId);
+  // get new value from the updated modal
   const handleEditSubmit = (e) => {
     const form = e.target;
     // Show a Task Submitting toast
@@ -124,19 +131,19 @@ const Tasks = () => {
       taskdeadline: form.deadline.value,
       taskPriority: priority,
       description: form.description.value,
-      userEmail: userinfo.email,
-      userName: userinfo.name,
     };
+    
     // Send The task info to the Server
-    // axios.post("/createTasks", taskInfo).then((res) => {
-    //   if (res.data.insertedId) {
-    //     toast.success("Task Created SuccessFully", { id: taskToast });
-    //     refetch();
-    //   }
-    // });
+    axios.patch(`/updateTasks/${editId}`, taskUpdateInfo).then((res) => {
+      if (res.data.modifiedCount >0) {
+        toast.success("Task update SuccessFully", { id: editToast });
+        refetch();
+      }
+    });
     console.log(taskUpdateInfo);
     document.getElementById("my_modal_2").close();
     form.reset();
+    setPriority('')
   };
 
   if (isLoading || isPending) {
