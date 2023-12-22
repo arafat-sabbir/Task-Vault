@@ -8,9 +8,9 @@ const Banner = () => {
   return (
     <>
       <div className="bg-[#FFF6EB]">
-        <div className="flex container mx-auto md:flex-row flex-col">
-          <div className="flex-1 items-center flex justify-center text-center md:text-start">
-            <h1 className="text-4xl font-semibold !tracking-wider !leading-[50px]"> <span className="text-main">Task Vault</span> :  Your Ultimate Task Management Solution! <br /> For :  <span>
+        <div className="flex container mx-auto lg:flex-row flex-col-reverse">
+          <div className="flex-1 items-center flex justify-center text-center lg:text-start">
+            <h1 className="lg:text-4xl text-2xl p-4 lg:p-0 font-semibold !tracking-wider !leading-[50px]"> <span className="text-main">Task Vault</span> :  Your Ultimate Task Management Solution! <br /> For :  <span>
             <Typewriter
               words={["Revolutionize Your Productivity", "Organize Your Journey", " Achieve Goals with Precision", " Your Key to Meeting Deadlines"," Maximize Efficiency for Work-Life"]}
               loop={5}

@@ -118,7 +118,6 @@ const Tasks = () => {
     setEditId(id)
     console.log(id);
   };
-console.log(editId);
   // get new value from the updated modal
   const handleEditSubmit = (e) => {
     const form = e.target;
@@ -149,10 +148,13 @@ console.log(editId);
   if (isLoading || isPending) {
     return <p className="text-5xl">Loading</p>;
   }
+  if(!toDo||!onGoing||!complete){
+    return <p className="text-5xl">Loading</p>
+  }
   return (
     <div>
-      <div className="flex justify-between min-w-full items-center">
-        <h1 className="text-3xl font-semibold">Your Tasks</h1>
+      <div className="flex lg:justify-between justify-end min-w-full items-center">
+        <h1 className="text-3xl font-semibold lg:block hidden">Your Tasks</h1>
         <button
           onClick={() => document.getElementById("my_modal_1").showModal()}
           className="flex font-semibold items-center bg-red-500 text-white px-4 py-2 rounded-sm"
@@ -311,7 +313,7 @@ console.log(editId);
       {tasks && (
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1  py-10 gap-10">
           <div className="bg-[#EEF2FC]">
-            <h3 className="text-3xl font-semibold ml-6 mt-6 max-h-min ">
+            <h3 className="text-3xl font-semibold ml-6 mt-6  ">
               To Do : {toDo?.length}{" "}
             </h3>
             {toDo?.map((item) => (

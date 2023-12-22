@@ -11,7 +11,7 @@ const OngoingTask = ({ task, handleDelete,handleEdit }) => {
     _id,
   } = task;
   return (
-    <div className="p-6 rounded-sm min-h-min">
+    <div className="p-6 rounded-sm ">
       <div className=" text-black mt-2">
         <div className="w-full flex flex-col px-4 py-3 bg-white rounded-md shadow-md dark:bg-gray-800">
           <div className="flex items-center justify-between">
@@ -36,7 +36,9 @@ const OngoingTask = ({ task, handleDelete,handleEdit }) => {
           <h3>{taskPriority}</h3>
          </div>
             <p className="mt-2 text-base text-gray-600 dark:text-gray-300">
-              {description}
+              alkdflkajdflkjalkdsjflkjajd
+              lfnlakjdflkadsflkadjfkljan
+              dlfnldfnaljkn
             </p>
           </div>
         </div>
