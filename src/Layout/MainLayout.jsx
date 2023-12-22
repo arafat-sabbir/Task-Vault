@@ -14,7 +14,7 @@ const MainLayout = () => {
         <NavLink to={"/"}>Home</NavLink>
       </li>
       <li>
-        <NavLink to={"/dashboard"}>Dashboard</NavLink>
+        <NavLink to={"/dashboard/tasks"}>Dashboard</NavLink>
       </li>
     </>
   );

@@ -5,6 +5,7 @@ import SignIn from "../Pages/SignIn/signIn";
 import SignUp from "../Pages/SignUp/SignUp";
 import Dashboard from "../Pages/Dashboard/Dashboard";
 import Tasks from "../Pages/Dashboard/Tasks/Tasks";
+import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
 
 const routes = createBrowserRouter([
     {
@@ -26,12 +27,12 @@ const routes = createBrowserRouter([
         element:<SignUp></SignUp>
     },
     {
-        path:"/dashboard",
-        element:<Dashboard></Dashboard>,
+        path:"dashboard",
+        element:<PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
         children:[
             {
                 path:'tasks',
-                element:<Tasks></Tasks>
+                element:<PrivateRoute><Tasks></Tasks></PrivateRoute>
             }
         ]
     }

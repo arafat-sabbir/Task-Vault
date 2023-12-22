@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { FaListCheck } from "react-icons/fa6";
 
 const Dashboard = () => {
@@ -15,11 +15,11 @@ const Dashboard = () => {
             Task Vault
           </div>
         </Link>
-        <Link to={'/dashboard/tasks'}> 
+        <NavLink to={'/dashboard/tasks'}> 
         <button className="text-center bg-[#FBF1E6] px-12 py-1 flex items-center mt-10 justify-between min-w-full">
         <FaListCheck className="mr-4"></FaListCheck> Tasks
         </button>
-            </Link>
+            </NavLink>
       </div>
       <div className=" ml-[280px] px-16 pt-24 w-full">
         <Outlet></Outlet>

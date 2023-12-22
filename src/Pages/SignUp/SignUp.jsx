@@ -44,17 +44,18 @@ const SignUp = () => {
               type: profession,
               creationDate: new Date().toDateString(),
             };
+            console.log(data.photoUrl);
 
             // if the profile get update successfully Send the data to the server
 
-            axios.post("/createUser", userdata)
-            .then((res) => {
-              if (res.data.insertedId) {
-                toast.success("Sign Up SuccessFully", { id: toastid });
-                reset();
-                navigate(location.state ? location.state : "/");
-              }
-            });
+            // axios.post("/createUser", userdata)
+            // .then((res) => {
+            //   if (res.data.insertedId) {
+            //     toast.success("Sign Up SuccessFully", { id: toastid });
+            //     reset();
+            //     navigate(location.state ? location.state : "/");
+            //   }
+            // });
           })
 
         //   If any error happen show it to the user 
@@ -112,6 +113,21 @@ const SignUp = () => {
                 <input
                   type="email"
                   placeholder="email"
+                  name="email"
+                  className="input input-bordered bg-gray-100 hover:bg-gray-100 border-dashed border-main focus:border-main"
+                  {...register("photo", { required: true })}
+                />
+                {errors.email && (
+                  <p className="text-red-500 mt-4">Please Type An Email</p>
+                )}
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Email</span>
+                </label>
+                <input
+                  type="file"
+                  placeholder="upload your Photo"
                   name="email"
                   className="input input-bordered bg-gray-100 hover:bg-gray-100 border-dashed border-main focus:border-main"
                   {...register("email", { required: true })}

@@ -16,7 +16,7 @@ const SignIn = () => {
   } = useForm();
   const { signInUser } = useAuth();
   const onSubmit = (data) => {
-    const toastid = toast.loading("Sign Up Processing");
+    const toastid = toast.loading("Sign In Processing");
     signInUser(data.email, data.password)
       .then((res) => {
         toast.success("Sign In SuccessFull", { id: toastid });
