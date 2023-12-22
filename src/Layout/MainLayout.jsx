@@ -59,9 +59,9 @@ const MainLayout = () => {
                 {/* Navbar menu content here */}
                 {links}
                 {user ? (
-                  <li>
-                    <button onClick={signOut} className="border-b-4 pb-2 bg-black text-white border-b-main rounded-none hover:rounded-none">Sign out</button>
-                  </li>
+                  
+                    <button onClick={signOut} className="border-b-4  bg-black text-white border-b-main rounded-none px-4 py-2 text-center ">Sign out</button>
+                  
                 ) : (
                   <li>
                     <Link to={"/signIn"}> <button className="border-b-4 border-main hover:rounded-none">Sign In</button> </Link>
