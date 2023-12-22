@@ -16,6 +16,15 @@ const MainLayout = () => {
       <li>
         <NavLink to={"/dashboard/tasks"}>Dashboard</NavLink>
       </li>
+      <li>
+        <a href="#userReview">User Review</a>
+      </li>
+      <li>
+        <a href="#insight">Insight</a>
+      </li>
+      <li>
+        <a href="#contactUs">Contact Us</a>
+      </li>
     </>
   );
   return (
